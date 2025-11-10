@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Reportes - SmartClient CRM{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Reportes de Ventas</h2>
+
+    <!-- Estadísticas Generales -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-success">${{ total_ventas|floatformat:2 }}</h5>
+                    <p class="card-text">Total de Ventas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ num_ventas }}</h5>
+                    <p class="card-text">Número de Ventas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-info">${{ promedio_venta|floatformat:2 }}</h5>
+                    <p class="card-text">Promedio por Venta</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventas por Mes -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Ventas por Mes (Últimos 12 Meses)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mes/Año</th>
+                                    <th>Total Ventas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for venta_mes in ventas_por_mes %}
+                                    <tr>
+                                        <td>{{ venta_mes.month }}/{{ venta_mes.year }}</td>
+                                        <td class="text-end">${{ venta_mes.total|floatformat:2 }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted">No hay datos de ventas.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rankings -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Ranking de Clientes por Monto</h5>
+                </div>
+                <div class="card-body">
+                    <ol class="list-group list-group-numbered">
+                        {% for cliente in ranking_monto %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ cliente.cliente__nombre }}</div>
+                                </div>
+                                <span class="badge bg-success rounded-pill">${{ cliente.total_compras|floatformat:2 }}</span>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-muted">No hay datos de clientes.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Ranking de Clientes por Frecuencia</h5>
+                </div>
+                <div class="card-body">
+                    <ol class="list-group list-group-numbered">
+                        {% for cliente in ranking_frecuencia %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ cliente.cliente__nombre }}</div>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ cliente.num_compras }} compra{{ cliente.num_compras|pluralize }}</span>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-muted">No hay datos de clientes.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de Exportación (Opcional) -->
+    <div class="mt-4 text-center">
+        <button class="btn btn-secondary" onclick="alert('Funcionalidad de exportación próximamente disponible.')">
+            <i class="fas fa-download"></i> Exportar Reporte (PDF/Excel)
+        </button>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - SmartClient CRM{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Total Clientes</h5>
+                <h2>{{ total_clientes }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-dollar-sign"></i> Total Ventas</h5>
+                <h2>${{ total_ventas|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Ventas del Mes</h5>
+                <h2>${{ ventas_mes|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-pie"></i> Estados de Clientes</h5>
+                <h2>{{ clientes_por_estado|length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> Clientes por Estado</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="clientesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-shopping-cart"></i> Ventas Recientes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for venta in ventas_recientes %}
+                        <li class="list-group-item">
+                            <strong>{{ venta.cliente.nombre }}</strong> - ${{ venta.monto|floatformat:2 }}
+                            <small class="text-muted">{{ venta.fecha }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No hay ventas recientes</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('clientesChart').getContext('2d');
+    const clientesData = {{ clientes_por_estado|safe }};
+    const labels = clientesData.map(item => item.estado);
+    const data = clientesData.map(item => item.count);
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545']
+            }]
+        }
+    });
+</script>
+{% endblock %}

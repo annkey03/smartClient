@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes - SmartClient CRM{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-users"></i> Mis Clientes</h2>
+    <a href="{% url 'cliente_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nuevo Cliente
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Contacto</th>
+                        <th>Correo</th>
+                        <th>Empresa</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                        <tr>
+                            <td>{{ cliente.nombre }}</td>
+                            <td>{{ cliente.contacto|default:"-" }}</td>
+                            <td>{{ cliente.correo }}</td>
+                            <td>{{ cliente.empresa|default:"-" }}</td>
+                            <td>
+                                <span class="badge bg-{% if cliente.estado == 'activo' %}success{% elif cliente.estado == 'prospecto' %}warning{% else %}secondary{% endif %}">
+                                    {{ cliente.get_estado_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'cliente_update' cliente.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="{% url 'cliente_delete' cliente.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                No tienes clientes registrados aún.
+                                <a href="{% url 'cliente_create' %}">Crear el primero</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

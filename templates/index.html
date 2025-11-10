@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}SmartClient - CRM{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4">Bienvenido a SmartClient</h1>
+            <p class="lead">Sistema de Gestión de Clientes y Ventas</p>
+            <hr class="my-4">
+            {% if user.is_authenticated %}
+                <p>Gestione sus clientes, ventas y oportunidades comerciales de manera eficiente.</p>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Clientes</h5>
+                                <p class="card-text">Registre y gestione sus clientes.</p>
+                                <a href="{% url 'cliente_list' %}" class="btn btn-primary">Ir a Clientes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Ventas</h5>
+                                <p class="card-text">Registre y consulte sus ventas.</p>
+                                <a href="{% url 'venta_list' %}" class="btn btn-success">Ir a Ventas</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Oportunidades</h5>
+                                <p class="card-text">Gestione oportunidades comerciales.</p>
+                                <a href="{% url 'oportunidad_list' %}" class="btn btn-info">Ir a Oportunidades</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Ver Dashboard</a>
+                    <a href="{% url 'reportes' %}" class="btn btn-outline-primary">Ver Reportes</a>
+                </div>
+            {% else %}
+                <p>Para acceder al sistema, por favor inicie sesión o regístrese.</p>
+                <div class="mt-4">
+                    <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary">Registrarse</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
