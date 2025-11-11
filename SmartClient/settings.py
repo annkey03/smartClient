@@ -22,7 +22,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Clave secreta
-SECRET_KEY = os.getenv("SECRET_KEY", default="django-insecure-i4v+4xw6ns@(_11y=kb$=am2vg*m4jwel%y71_6i55u@)2wmv7")
+SECRET_KEY = os.getenv("SECRET_KEY", default='clave-secreta-por-defecto')
 
 # Modo de depuración
 DEBUG = os.getenv("DEBUG", "True") == "True"
