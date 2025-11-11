@@ -1,57 +1,572 @@
 {% extends 'base.html' %}
 
-{% block title %}SmartClient - CRM{% endblock %}
+{% block title %}SmartClient{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h1 class="display-4">Bienvenido a SmartClient</h1>
-            <p class="lead">Sistema de Gestión de Clientes y Ventas</p>
-            <hr class="my-4">
-            {% if user.is_authenticated %}
-                <p>Gestione sus clientes, ventas y oportunidades comerciales de manera eficiente.</p>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Clientes</h5>
-                                <p class="card-text">Registre y gestione sus clientes.</p>
-                                <a href="{% url 'cliente_list' %}" class="btn btn-primary">Ir a Clientes</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Ventas</h5>
-                                <p class="card-text">Registre y consulte sus ventas.</p>
-                                <a href="{% url 'venta_list' %}" class="btn btn-success">Ir a Ventas</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Oportunidades</h5>
-                                <p class="card-text">Gestione oportunidades comerciales.</p>
-                                <a href="{% url 'oportunidad_list' %}" class="btn btn-info">Ir a Oportunidades</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Ver Dashboard</a>
-                    <a href="{% url 'reportes' %}" class="btn btn-outline-primary">Ver Reportes</a>
-                </div>
-            {% else %}
-                <p>Para acceder al sistema, por favor inicie sesión o regístrese.</p>
-                <div class="mt-4">
-                    <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
-                    <a href="{% url 'register' %}" class="btn btn-outline-primary">Registrarse</a>
-                </div>
-            {% endif %}
+<div class="container py-5">
+    <!-- Hero Section con animación -->
+    <div class="hero-section text-center mb-5">
+        <div class="hero-content">
+            <div class="icon-float mb-4">
+                <i class="fa-solid fa-bolt fa-4x text-gradient"></i>
+            </div>
+            <h1 class="fw-bold display-3 mb-3 title-animate">
+                Bienvenido a <span class="text-gradient-animated">SmartClient</span>
+            </h1>
+            <p class="lead hero-subtitle fs-4 subtitle-animate">
+                Tu sistema inteligente para gestionar clientes, ventas y oportunidades
+            </p>
+            <div class="decorative-line"></div>
         </div>
     </div>
+
+    <!-- Cards principales con animación escalonada - SIEMPRE VISIBLES -->
+    <div class="row g-4 justify-content-center mb-5">
+
+        <!-- Clientes -->
+        <div class="col-lg-4 col-md-6 card-stagger" style="animation-delay: 0.1s">
+            <div class="feature-card card-clients h-100">
+                <div class="card-glow"></div>
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mb-4">
+                        <div class="icon-circle bg-primary-gradient">
+                            <i class="fa-solid fa-users fa-3x text-white"></i>
+                        </div>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3 card-title-text">Clientes</h5>
+                    <p class="card-text card-description mb-4">
+                        Registra y administra fácilmente todos tus clientes en un solo lugar
+                    </p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'cliente_list' %}" class="btn btn-primary btn-gradient w-100 btn-animated">
+                            <span>Ir a Clientes</span>
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-gradient w-100 btn-animated">
+                            <span>Empieza ahora</span>
+                            <i class="fa-solid fa-lock ms-2"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="card-stats">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <span>Gestión Integral</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ventas -->
+        <div class="col-lg-4 col-md-6 card-stagger" style="animation-delay: 0.2s">
+            <div class="feature-card card-sales h-100">
+                <div class="card-glow"></div>
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mb-4">
+                        <div class="icon-circle bg-success-gradient">
+                            <i class="fa-solid fa-chart-line fa-3x text-white"></i>
+                        </div>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3 card-title-text">Ventas</h5>
+                    <p class="card-text card-description mb-4">
+                        Registra, consulta y analiza todas tus ventas con reportes detallados
+                    </p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'venta_list' %}" class="btn btn-success btn-gradient w-100 btn-animated">
+                            <span>Ir a Ventas</span>
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-success btn-gradient w-100 btn-animated">
+                            <span>Empieza ahora</span>
+                            <i class="fa-solid fa-lock ms-2"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="card-stats">
+                    <i class="fa-solid fa-trending-up"></i>
+                    <span>Análisis en Tiempo Real</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Oportunidades -->
+        <div class="col-lg-4 col-md-6 card-stagger" style="animation-delay: 0.3s">
+            <div class="feature-card card-opportunities h-100">
+                <div class="card-glow"></div>
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mb-4">
+                        <div class="icon-circle bg-info-gradient">
+                            <i class="fa-solid fa-lightbulb fa-3x text-white"></i>
+                        </div>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3 card-title-text">Oportunidades</h5>
+                    <p class="card-text card-description mb-4">
+                        Identifica y gestiona nuevas oportunidades comerciales estratégicas
+                    </p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'oportunidad_list' %}" class="btn btn-info text-white btn-gradient w-100 btn-animated">
+                            <span>Ir a Oportunidades</span>
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-info text-white btn-gradient w-100 btn-animated">
+                            <span>Empieza ahora</span>
+                            <i class="fa-solid fa-lock ms-2"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="card-stats">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Conversión Optimizada</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <!-- Botones de acción secundarios - Solo para usuarios autenticados -->
+    <div class="action-buttons text-center mt-5">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 me-3 mb-3 btn-float">
+            <i class="fa-solid fa-chart-pie me-2"></i>
+            <span>Ver Dashboard</span>
+        </a>
+        <a href="{% url 'reportes' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-5 mb-3 btn-float">
+            <i class="fa-solid fa-file-chart-line me-2"></i>
+            <span>Ver Reportes</span>
+        </a>
+    </div>
+    {% else %}
+    <!-- Call to action para usuarios no autenticados -->
+        </div>
+    </div>
+    {% endif %}
 </div>
+
+<style>
+/* ============ ANIMACIONES Y EFECTOS ============ */
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    padding: 3rem 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-subtitle {
+    color: #6c757d;
+}
+
+/* Icono flotante animado */
+.icon-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Texto con gradiente */
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-animated {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Animaciones de entrada */
+.title-animate {
+    animation: slideDown 0.8s ease-out;
+}
+
+.subtitle-animate {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Línea decorativa */
+.decorative-line {
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #667eea, transparent);
+    margin: 2rem auto;
+    border-radius: 2px;
+    animation: expandLine 1s ease-out 0.5s both;
+}
+
+@keyframes expandLine {
+    from { width: 0; }
+    to { width: 100px; }
+}
+
+/* ============ FEATURE CARDS ============ */
+
+.card-stagger {
+    animation: cardSlideUp 0.6s ease-out both;
+}
+
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-card {
+    position: relative;
+    border: none;
+    border-radius: 25px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Textos de las cards */
+.card-title-text {
+    color: #212529;
+}
+
+.card-description {
+    color: #6c757d;
+}
+
+/* Efecto de brillo en las cards */
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.feature-card:hover .card-glow {
+    opacity: 1;
+    animation: glowMove 2s ease-in-out infinite;
+}
+
+@keyframes glowMove {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, 20px); }
+}
+
+/* Iconos circulares */
+.icon-wrapper {
+    display: inline-block;
+}
+
+.icon-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-circle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0);
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+}
+
+.feature-card:hover .icon-circle {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.feature-card:hover .icon-circle::before {
+    transform: scale(1);
+}
+
+/* Gradientes para iconos */
+.bg-primary-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-success-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.bg-info-gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+/* Stats en las cards */
+.card-stats {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+.feature-card:hover .card-stats {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============ BOTONES ============ */
+
+.btn-gradient {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.btn-gradient:hover::before {
+    left: 100%;
+}
+
+.btn-animated {
+    transition: all 0.3s ease;
+}
+
+.btn-animated:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animated i {
+    transition: transform 0.3s ease;
+}
+
+.btn-animated:hover i {
+    transform: translateX(5px);
+}
+
+.btn-float {
+    transition: all 0.4s ease;
+}
+
+.btn-float:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ============ ACTION BUTTONS ============ */
+
+.action-buttons {
+    animation: fadeInUp 1.2s ease-out 0.6s both;
+}
+
+/* ============ AUTH PROMPT ============ */
+
+.auth-prompt {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 1s ease-out 0.9s both;
+    border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.auth-icon {
+    animation: bounceIn 1s ease-out 1.2s both;
+}
+
+.auth-title {
+    color: #212529;
+}
+
+.auth-description {
+    color: #6c757d;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.auth-buttons {
+    animation: fadeInUp 1.2s ease-out 1.4s both;
+}
+
+/* ============ MODO OSCURO ============ */
+
+body.dark-mode .hero-subtitle {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .feature-card {
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.95), rgba(40, 40, 60, 0.95));
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .feature-card:hover {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .card-title-text {
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .card-description {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .card-stats {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+    color: #aaa;
+}
+
+body.dark-mode .auth-prompt {
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.98), rgba(40, 40, 60, 0.98));
+    border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+body.dark-mode .auth-title {
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode .auth-description {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .decorative-line {
+    background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    .action-buttons .btn,
+    .auth-buttons .btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0 !important;
+    }
+    
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .icon-circle i {
+        font-size: 2rem !important;
+    }
+}
+</style>
+
 {% endblock %}

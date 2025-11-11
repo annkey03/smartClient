@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count
 from django.utils import timezone
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 from venta.models import Venta
 from clientes.models import Cliente
 
@@ -17,7 +19,7 @@ def dashboard(request):
     ).aggregate(total=Sum('monto'))['total'] or 0
 
     # Clientes por estado
-    clientes_por_estado = Cliente.objects.filter(usuario=request.user).values('estado').annotate(count=Count('estado'))
+    clientes_por_estado = list(Cliente.objects.filter(usuario=request.user).values('estado').annotate(count=Count('estado')))
 
     # Ventas recientes
     ventas_recientes = Venta.objects.filter(usuario=request.user).select_related('cliente').order_by('-fecha')[:5]
@@ -41,11 +43,15 @@ def reportes(request):
     num_ventas = Venta.objects.filter(usuario=request.user).count()
     promedio_venta = total_ventas / num_ventas if num_ventas > 0 else 0
 
-    # Ventas por mes (últimos 12 meses)
-    ventas_por_mes = Venta.objects.filter(
+    # Ventas por día del mes actual
+    from django.db.models.functions import ExtractDay
+    ventas_por_dia = Venta.objects.filter(
         usuario=request.user,
-        fecha__gte=timezone.now() - timezone.timedelta(days=365)
-    ).extra(select={'month': "EXTRACT(month FROM fecha)", 'year': "EXTRACT(year FROM fecha)"}).values('year', 'month').annotate(total=Sum('monto')).order_by('year', 'month')
+        fecha__month=timezone.now().month,
+        fecha__year=timezone.now().year
+    ).annotate(
+        day=ExtractDay('fecha')
+    ).values('day').annotate(total=Sum('monto')).order_by('day')
 
     # Ranking de clientes por monto
     ranking_monto = Venta.objects.filter(usuario=request.user).values('cliente__nombre').annotate(
@@ -57,11 +63,14 @@ def reportes(request):
         num_compras=Count('cliente')
     ).order_by('-num_compras')[:10]
 
+    # Convertir ventas_por_dia a lista para JSON
+    ventas_por_dia_list = list(ventas_por_dia.values('day', 'total'))
+
     context = {
         'total_ventas': total_ventas,
         'num_ventas': num_ventas,
         'promedio_venta': promedio_venta,
-        'ventas_por_mes': ventas_por_mes,
+        'ventas_por_mes': json.dumps(ventas_por_dia_list, cls=DjangoJSONEncoder),
         'ranking_monto': ranking_monto,
         'ranking_frecuencia': ranking_frecuencia,
     }

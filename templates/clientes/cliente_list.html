@@ -4,52 +4,56 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="fas fa-users"></i> Mis Clientes</h2>
-    <a href="{% url 'cliente_create' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Nuevo Cliente
+    <h2 class="fw-bold text-primary"><i class="fas fa-users me-2"></i> Mis Clientes</h2>
+    <a href="{% url 'cliente_create' %}" class="btn btn-primary btn-lg shadow-sm">
+        <i class="fas fa-plus me-1"></i> Nuevo Cliente
     </a>
 </div>
 
-<div class="card">
+<div class="card shadow-sm rounded-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
                     <tr>
                         <th>Nombre</th>
                         <th>Contacto</th>
                         <th>Correo</th>
                         <th>Empresa</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for cliente in clientes %}
                         <tr>
-                            <td>{{ cliente.nombre }}</td>
+                            <td class="fw-semibold">{{ cliente.nombre }}</td>
                             <td>{{ cliente.contacto|default:"-" }}</td>
                             <td>{{ cliente.correo }}</td>
                             <td>{{ cliente.empresa|default:"-" }}</td>
                             <td>
-                                <span class="badge bg-{% if cliente.estado == 'activo' %}success{% elif cliente.estado == 'prospecto' %}warning{% else %}secondary{% endif %}">
-                                    {{ cliente.get_estado_display }}
-                                </span>
+                                {% if cliente.estado == 'activo' %}
+                                    <span class="badge rounded-pill bg-success">Activo</span>
+                                {% elif cliente.estado == 'prospecto' %}
+                                    <span class="badge rounded-pill bg-warning text-dark">Prospecto</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-secondary">Inactivo</span>
+                                {% endif %}
                             </td>
-                            <td>
-                                <a href="{% url 'cliente_update' cliente.pk %}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-edit"></i> Editar
+                            <td class="text-center">
+                                <a href="{% url 'cliente_update' cliente.pk %}" class="btn btn-sm btn-outline-primary me-1 shadow-sm">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{% url 'cliente_delete' cliente.pk %}" class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash"></i> Eliminar
+                                <a href="{% url 'cliente_delete' cliente.pk %}" class="btn btn-sm btn-outline-danger shadow-sm">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="6" class="text-center text-muted">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 No tienes clientes registrados aún.
-                                <a href="{% url 'cliente_create' %}">Crear el primero</a>
+                                <a href="{% url 'cliente_create' %}" class="text-primary fw-semibold">Crear el primero</a>
                             </td>
                         </tr>
                     {% endfor %}

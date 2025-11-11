@@ -12,7 +12,11 @@ class OportunidadForm(forms.ModelForm):
         model = Oportunidad
         fields = ['titulo', 'descripcion', 'etapa', 'cliente', 'recordatorio']
         widgets = {
-            'descripcion': forms.Textarea(attrs={'rows': 3}),
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'etapa': forms.Select(attrs={'class': 'form-select'}),
+            'cliente': forms.Select(attrs={'class': 'form-select'}),
+            'recordatorio': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):

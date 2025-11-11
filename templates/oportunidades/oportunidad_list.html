@@ -4,56 +4,66 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="fas fa-lightbulb"></i> Mis Oportunidades</h2>
-    <a href="{% url 'oportunidad_create' %}" class="btn btn-warning">
-        <i class="fas fa-plus"></i> Nueva Oportunidad
+    <h2 class="fw-bold text-primary"><i class="fas fa-lightbulb"></i> Mis Oportunidades</h2>
+    <a href="{% url 'oportunidad_create' %}" class="btn btn-warning btn-lg shadow-sm">
+        <i class="fas fa-plus me-1"></i> Nueva Oportunidad
     </a>
 </div>
 
-<div class="card">
+<div class="card shadow-sm rounded-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
                     <tr>
                         <th>Título</th>
                         <th>Cliente</th>
                         <th>Etapa</th>
                         <th>Recordatorio</th>
-                        <th>Acciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for oportunidad in oportunidades %}
                         <tr>
-                            <td>{{ oportunidad.titulo }}</td>
+                            <td class="fw-semibold">{{ oportunidad.titulo }}</td>
                             <td>{{ oportunidad.cliente.nombre|default:"Sin cliente" }}</td>
                             <td>
-                                <span class="badge bg-{% if oportunidad.etapa == 'contactado' %}info{% elif oportunidad.etapa == 'negociacion' %}warning{% else %}success{% endif %}">
-                                    {{ oportunidad.get_etapa_display }}
-                                </span>
+                                {% if oportunidad.etapa == 'contactado' %}
+                                    <span class="badge rounded-pill bg-info text-dark">
+                                        {{ oportunidad.get_etapa_display }}
+                                    </span>
+                                {% elif oportunidad.etapa == 'negociacion' %}
+                                    <span class="badge rounded-pill bg-warning text-dark">
+                                        {{ oportunidad.get_etapa_display }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-success">
+                                        {{ oportunidad.get_etapa_display }}
+                                    </span>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if oportunidad.recordatorio %}
                                     {{ oportunidad.recordatorio|date:"d/m/Y H:i" }}
                                 {% else %}
-                                    -
+                                    <span class="text-muted">-</span>
                                 {% endif %}
                             </td>
-                            <td>
-                                <a href="{% url 'oportunidad_update' oportunidad.pk %}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-edit"></i> Editar
+                            <td class="text-center">
+                                <a href="{% url 'oportunidad_update' oportunidad.pk %}" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="{% url 'oportunidad_delete' oportunidad.pk %}" class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash"></i> Eliminar
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="5" class="text-center text-muted">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 No tienes oportunidades registradas aún.
-                                <a href="{% url 'oportunidad_create' %}">Crear la primera</a>
+                                <a href="{% url 'oportunidad_create' %}" class="text-warning fw-semibold">Crear la primera</a>
                             </td>
                         </tr>
                     {% endfor %}

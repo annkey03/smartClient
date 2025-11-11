@@ -3,111 +3,113 @@
 {% block title %}Reportes - SmartClient CRM{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Reportes de Ventas</h2>
-
-    <!-- Estadísticas Generales -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-success">${{ total_ventas|floatformat:2 }}</h5>
-                    <p class="card-text">Total de Ventas</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-primary">{{ num_ventas }}</h5>
-                    <p class="card-text">Número de Ventas</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-info">${{ promedio_venta|floatformat:2 }}</h5>
-                    <p class="card-text">Promedio por Venta</p>
-                </div>
-            </div>
-        </div>
+<div class="container py-5">
+    <!-- Título principal -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-chart-line me-2 text-primary"></i> Reportes de Ventas
+        </h2>
+        <p class="text-muted">Resumen de desempeño y análisis de tus ventas recientes</p>
     </div>
 
-    <!-- Ventas por Mes -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Ventas por Mes (Últimos 12 Meses)</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Mes/Año</th>
-                                    <th>Total Ventas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for venta_mes in ventas_por_mes %}
-                                    <tr>
-                                        <td>{{ venta_mes.month }}/{{ venta_mes.year }}</td>
-                                        <td class="text-end">${{ venta_mes.total|floatformat:2 }}</td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="2" class="text-center text-muted">No hay datos de ventas.</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+    <!-- ======== ESTADÍSTICAS GENERALES ======== -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm">
+                <div class="card-body text-center py-4">
+                    <div class="icon-circle bg-success-subtle text-success mb-3">
+                        <i class="fa-solid fa-sack-dollar"></i>
                     </div>
+                    <h4 class="fw-bold">${{ total_ventas|floatformat:2 }}</h4>
+                    <p class="text-muted mb-0">Total de Ventas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm">
+                <div class="card-body text-center py-4">
+                    <div class="icon-circle bg-primary-subtle text-primary mb-3">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h4 class="fw-bold">{{ num_ventas }}</h4>
+                    <p class="text-muted mb-0">Número de Ventas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm">
+                <div class="card-body text-center py-4">
+                    <div class="icon-circle bg-info-subtle text-info mb-3">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <h4 class="fw-bold">${{ promedio_venta|floatformat:2 }}</h4>
+                    <p class="text-muted mb-0">Promedio por Venta</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Rankings -->
-    <div class="row">
+    <!-- ======== GRÁFICO DE VENTAS POR MES ======== -->
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-header text-white fw-semibold"
+             style="background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));">
+            <i class="fa-solid fa-chart-line me-2"></i> Ventas por Día (Mes Actual)
+        </div>
+        <div class="card-body">
+            <div id="chartContainer" style="position: relative; height: 300px; width: 100%;">
+                <canvas id="ventasChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== RANKINGS ======== -->
+    <div class="row g-4">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Ranking de Clientes por Monto</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header fw-semibold text-white"
+                     style="background: linear-gradient(90deg, #00b09b, #96c93d);">
+                    <i class="fa-solid fa-crown me-2"></i> Ranking de Clientes por Monto
                 </div>
                 <div class="card-body">
                     <ol class="list-group list-group-numbered">
                         {% for cliente in ranking_monto %}
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">{{ cliente.cliente__nombre }}</div>
-                                </div>
-                                <span class="badge bg-success rounded-pill">${{ cliente.total_compras|floatformat:2 }}</span>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">{{ cliente.cliente__nombre }}</span>
+                                <span class="badge bg-success rounded-pill">
+                                    ${{ cliente.total_compras|floatformat:2 }}
+                                </span>
                             </li>
                         {% empty %}
-                            <li class="list-group-item text-muted">No hay datos de clientes.</li>
+                            <li class="list-group-item text-muted text-center">
+                                No hay datos de clientes.
+                            </li>
                         {% endfor %}
                     </ol>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Ranking de Clientes por Frecuencia</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header fw-semibold text-white"
+                     style="background: linear-gradient(90deg, #4361ee, #4cc9f0);">
+                    <i class="fa-solid fa-user-clock me-2"></i> Ranking de Clientes por Frecuencia
                 </div>
                 <div class="card-body">
                     <ol class="list-group list-group-numbered">
                         {% for cliente in ranking_frecuencia %}
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">{{ cliente.cliente__nombre }}</div>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">{{ cliente.num_compras }} compra{{ cliente.num_compras|pluralize }}</span>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">{{ cliente.cliente__nombre }}</span>
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ cliente.num_compras }} compra{{ cliente.num_compras|pluralize }}
+                                </span>
                             </li>
                         {% empty %}
-                            <li class="list-group-item text-muted">No hay datos de clientes.</li>
+                            <li class="list-group-item text-muted text-center">
+                                No hay datos de clientes.
+                            </li>
                         {% endfor %}
                     </ol>
                 </div>
@@ -115,11 +117,93 @@
         </div>
     </div>
 
-    <!-- Botón de Exportación (Opcional) -->
-    <div class="mt-4 text-center">
-        <button class="btn btn-secondary" onclick="alert('Funcionalidad de exportación próximamente disponible.')">
-            <i class="fas fa-download"></i> Exportar Reporte (PDF/Excel)
+    <!-- ======== BOTÓN EXPORTAR ======== -->
+    <div class="text-center mt-5">
+        <button class="btn btn-outline-secondary rounded-pill px-4 py-2"
+                onclick="alert('Funcionalidad de exportación próximamente disponible.')">
+            <i class="fa-solid fa-file-export me-2"></i> Exportar Reporte (PDF/Excel)
         </button>
     </div>
 </div>
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('ventasChart');
+        if (ctx) {
+            const ventasData = JSON.parse('{{ ventas_por_mes|escapejs }}');
+            const labels = ventasData.map(item => `Día ${item.day}`);
+            const data = ventasData.map(item => parseFloat(item.total));
+
+            new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ventas por Día',
+                        data: data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+<style>
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .table thead th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    .list-group-item {
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+    body.dark-mode .table thead th {
+        background-color: #222;
+        color: #f1f1f1;
+    }
+    body.dark-mode .list-group-item {
+        background-color: #1e1e1e;
+        border-color: #333;
+        color: #ddd;
+    }
+</style>
 {% endblock %}

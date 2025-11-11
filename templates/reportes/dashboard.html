@@ -3,68 +3,83 @@
 {% block title %}Dashboard - SmartClient CRM{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-3">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-users"></i> Total Clientes</h5>
-                <h2>{{ total_clientes }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-dollar-sign"></i> Total Ventas</h5>
-                <h2>${{ total_ventas|floatformat:2 }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Ventas del Mes</h5>
-                <h2>${{ ventas_mes|floatformat:2 }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-chart-pie"></i> Estados de Clientes</h5>
-                <h2>{{ clientes_por_estado|length }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="container-fluid py-4">
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-chart-bar"></i> Clientes por Estado</h5>
+    <!-- FILA DE MÉTRICAS -->
+    <div class="row g-4 mb-4 text-center">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-primary text-white h-100">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h5 class="card-title mb-1">Total Clientes</h5>
+                    <h2 class="fw-bold">{{ total_clientes }}</h2>
+                </div>
             </div>
-            <div class="card-body">
-                <canvas id="clientesChart"></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-success text-white h-100">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                    <h5 class="card-title mb-1">Total Ventas</h5>
+                    <h2 class="fw-bold">${{ total_ventas|floatformat:2 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-info text-white h-100">
+                <div class="card-body">
+                    <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                    <h5 class="card-title mb-1">Ventas del Mes</h5>
+                    <h2 class="fw-bold">${{ ventas_mes|floatformat:2 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-warning text-white h-100">
+                <div class="card-body">
+                    <i class="fas fa-chart-pie fa-2x mb-2"></i>
+                    <h5 class="card-title mb-1">Estados de Clientes</h5>
+                    <h2 class="fw-bold">{{ clientes_por_estado|length }}</h2>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-shopping-cart"></i> Ventas Recientes</h5>
+
+    <!-- FILA DE GRÁFICOS Y LISTAS -->
+    <div class="row g-4">
+        <!-- GRÁFICO DE CLIENTES -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 text-primary fw-semibold"><i class="fas fa-chart-bar me-2"></i>Clientes por Estado</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="clientesChart" height="180"></canvas>
+                </div>
             </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    {% for venta in ventas_recientes %}
-                        <li class="list-group-item">
-                            <strong>{{ venta.cliente.nombre }}</strong> - ${{ venta.monto|floatformat:2 }}
-                            <small class="text-muted">{{ venta.fecha }}</small>
-                        </li>
-                    {% empty %}
-                        <li class="list-group-item">No hay ventas recientes</li>
-                    {% endfor %}
-                </ul>
+        </div>
+
+        <!-- LISTA DE VENTAS RECIENTES -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 text-success fw-semibold"><i class="fas fa-shopping-cart me-2"></i>Ventas Recientes</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for venta in ventas_recientes %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ venta.cliente.nombre }}</strong>
+                                    <div class="text-muted small">{{ venta.fecha }}</div>
+                                </div>
+                                <span class="fw-bold text-success">${{ venta.monto|floatformat:2 }}</span>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center text-muted">No hay ventas recientes</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -74,19 +89,31 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('clientesChart').getContext('2d');
-    const clientesData = {{ clientes_por_estado|safe }};
-    const labels = clientesData.map(item => item.estado);
-    const data = clientesData.map(item => item.count);
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('clientesChart');
+        if (ctx) {
+            const clientesData = {{ clientes_por_estado|safe }};
+            console.log('Clientes data:', clientesData); // Debug
+            const labels = clientesData.map(item => item.estado);
+            const data = clientesData.map(item => item.count);
 
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545']
-            }]
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
         }
     });
 </script>

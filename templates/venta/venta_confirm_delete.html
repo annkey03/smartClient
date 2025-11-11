@@ -1,47 +1,72 @@
 {% extends 'base.html' %}
 
-{% block title %}Eliminar Venta - SmartClient CRM{% endblock %}
+{% block title %}Eliminar Venta - SmartClient{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card border-danger">
-            <div class="card-header bg-danger text-white">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
-                </h3>
+<div class="container py-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <!-- Encabezado -->
+        <div class="card-header text-white rounded-top-4 d-flex align-items-center"
+             style="background: linear-gradient(90deg, #ff416c, #ff4b2b);">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+            <h3 class="mb-0 fw-bold">Confirmar Eliminación</h3>
+        </div>
+
+        <!-- Contenido -->
+        <div class="card-body p-5">
+            <p class="fs-5 mb-4 text-center text-muted">
+                ¿Estás seguro de que deseas eliminar esta venta?  
+                <br><strong>Esta acción no se puede deshacer.</strong>
+            </p>
+
+            <!-- Detalle de la venta -->
+            <div class="card border-0 shadow-sm mb-4 rounded-3">
+                <div class="card-body bg-light">
+                    <h5 class="fw-bold mb-2">{{ venta.cliente.nombre }}</h5>
+                    <p class="mb-0 text-secondary">
+                        <i class="bi bi-calendar3 me-1"></i> <strong>Fecha:</strong> {{ venta.fecha|date:"d/m/Y" }}<br>
+                        <i class="bi bi-box-seam me-1"></i> <strong>Producto/Servicio:</strong> {{ venta.producto_servicio }}<br>
+                        <i class="bi bi-currency-dollar me-1"></i> <strong>Monto:</strong> ${{ venta.monto|floatformat:2 }}
+                    </p>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="mb-4">¿Estás seguro de que deseas eliminar esta venta?</p>
 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ venta.cliente.nombre }}</h5>
-                        <p class="card-text">
-                            <strong>Fecha:</strong> {{ venta.fecha|date:"d/m/Y" }}<br>
-                            <strong>Producto/Servicio:</strong> {{ venta.producto_servicio }}<br>
-                            <strong>Monto:</strong> ${{ venta.monto|floatformat:2 }}
-                        </p>
-                    </div>
+            <!-- Alerta -->
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                <div>
+                    <strong>Advertencia:</strong> Esta eliminación será permanente.
                 </div>
+            </div>
 
-                <div class="alert alert-warning">
-                    <strong>Advertencia:</strong> Esta acción no se puede deshacer.
-                </div>
+            <!-- Botones -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{% url 'venta_list' %}" class="btn btn-outline-secondary px-4 py-2 rounded-pill">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Cancelar
+                </a>
 
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{% url 'venta_list' %}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Cancelar
-                    </a>
-                    <form method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Sí, Eliminar
-                        </button>
-                    </form>
-                </div>
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn text-white px-4 py-2 rounded-pill"
+                            style="background: linear-gradient(90deg, #ff4b2b, #ff416c);">
+                        <i class="bi bi-trash-fill me-1"></i> Sí, eliminar
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card-header {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .alert-warning {
+        border-left: 5px solid #ff4b2b;
+        background-color: #fff8e1;
+    }
+    .card-body p {
+        font-size: 0.95rem;
+    }
+</style>
 {% endblock %}
