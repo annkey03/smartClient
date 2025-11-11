@@ -8,4 +8,12 @@ urlpatterns = [
     path('<int:pk>/delete/', views.cliente_delete, name='cliente_delete'),
     path('register/', views.register, name='register'),
     path('logout/', views.logout_view, name='logout'),
+    # Admin URLs
+    path('admin/', views.admin_panel, name='admin_panel'),
+    path('admin/user/create/', views.user_create, name='user_create'),
+    path('admin/user/<int:pk>/edit/', views.user_update, name='user_update'),
+    path('admin/user/<int:pk>/delete/', views.user_delete, name='user_delete'),
+    path('admin/company-type/create/', views.company_type_create, name='company_type_create'),
+    path('admin/company-type/<int:pk>/edit/', views.company_type_update, name='company_type_update'),
+    path('admin/company-type/<int:pk>/delete/', views.company_type_delete, name='company_type_delete'),
 ]

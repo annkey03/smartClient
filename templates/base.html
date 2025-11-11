@@ -207,6 +207,15 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_panel' %}"><i class="fas fa-cog"></i> Panel Admin</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'user_create' %}"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'company_type_create' %}"><i class="fas fa-building"></i> Crear Tipo Empresa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cliente_list' %}"><i class="fas fa-users"></i> Ver Clientes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'reportes' %}"><i class="fas fa-chart-bar"></i> Reportes Globales</a></li>
+                    </ul>
+                    {% else %}
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-gauge"></i> Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'cliente_list' %}"><i class="fas fa-users"></i> Clientes</a></li>
@@ -214,6 +223,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'oportunidad_list' %}"><i class="fas fa-lightbulb"></i> Oportunidades</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'reportes' %}"><i class="fas fa-chart-bar"></i> Reportes</a></li>
                     </ul>
+                    {% endif %}
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item me-2">
                             <button class="btn-theme" id="themeToggle" title="Cambiar tema">

@@ -31,7 +31,7 @@ class ClienteForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'contacto': forms.TextInput(attrs={'class': 'form-control'}),
             'correo': forms.EmailInput(attrs={'class': 'form-control'}),
-            'empresa': forms.TextInput(attrs={'class': 'form-control'}),
+            'empresa': forms.Select(attrs={'class': 'form-select'}),
             'observaciones': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'estado': forms.Select(attrs={'class': 'form-select'}),
         }
