@@ -65,6 +65,22 @@ MIDDLEWARE = [
 # WhiteNoise en produccion
 if not DEBUG:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    # Seguridad adicional en producción
+    # Forzar redirección a HTTPS
+    SECURE_SSL_REDIRECT = True
+    # Cookies seguras
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # HSTS (1 año)
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    # Si la app está detrás de un proxy que añade X-Forwarded-Proto
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # Evitar framing
+    X_FRAME_OPTIONS = 'DENY'
+    # Política de referer (opcional)
+    SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 
 ROOT_URLCONF = 'SmartClient.urls'
 
@@ -150,3 +166,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Sesión: cerrar sesión tras 5 minutos de inactividad
+# 300 segundos = 5 minutos
+SESSION_COOKIE_AGE = 300
+# Reinicia el contador de expiración en cada petición activa
+SESSION_SAVE_EVERY_REQUEST = True
+# No cerrar la sesión automáticamente al cerrar el navegador (ajustable)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False

@@ -92,7 +92,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('clientesChart');
         if (ctx) {
-            const clientesData = {{ clientes_por_estado|safe }};
+            // Usar json_script para evitar XSS al inyectar JSON en JS
+            // El bloque html con id 'clientesData' será insertado más arriba por json_script
+            const clientesData = JSON.parse(document.getElementById('clientesData').textContent);
             console.log('Clientes data:', clientesData); // Debug
             const labels = clientesData.map(item => item.estado);
             const data = clientesData.map(item => item.count);
@@ -117,4 +119,9 @@
         }
     });
 </script>
+{% endblock %}
+
+{% block extra_html %}
+    {# Colocar aquí el JSON seguro para el script #}
+    {{ clientes_por_estado|json_script:"clientesData" }}
 {% endblock %}
