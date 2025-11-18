@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}{% if user %}Editar Usuario{% else %}Crear Usuario{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    {% if user %}
+                        <i class="fas fa-edit"></i> Editar Usuario: {{ user.username }}
+                    {% else %}
+                        <i class="fas fa-plus"></i> Crear Nuevo Usuario
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default:'' }}" required>
+                    </div>
+                    {% if not user %}
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                    {% endif %}
+                    {% if user %}
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_superuser" name="is_superuser" {% if user.is_superuser %}checked{% endif %}>
+                        <label class="form-check-label" for="is_superuser">Superusuario</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_staff" name="is_staff" {% if user.is_staff %}checked{% endif %}>
+                        <label class="form-check-label" for="is_staff">Staff</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {% if user.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active">Activo</label>
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">
+                        {% if user %}Actualizar{% else %}Crear{% endif %}
+                    </button>
+                    <a href="{% url 'admin_panel' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

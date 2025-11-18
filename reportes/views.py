@@ -34,6 +34,8 @@ def dashboard(request):
     return render(request, 'reportes/dashboard.html', context)
 
 def index(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        return redirect('admin_panel')
     return render(request, 'index.html')
 
 @login_required

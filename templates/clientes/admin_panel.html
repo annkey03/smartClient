@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4"><i class="fas fa-cog"></i> Panel de Administración</h1>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Gestión de Usuarios -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-users"></i> Gestión de Usuarios</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'user_create' %}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Crear Usuario</a>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Superusuario</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.is_superuser %}
+                                        <span class="badge bg-success">Sí</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'user_update' user.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                    {% if not user.is_superuser or user != request.user %}
+                                    <a href="{% url 'user_delete' user.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestión de Tipos de Empresa -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-building"></i> Tipos de Empresa</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'company_type_create' %}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Crear Tipo</a>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for company_type in company_types %}
+                            <tr>
+                                <td>{{ company_type.name }}</td>
+                                <td>{{ company_type.description|truncatechars:50 }}</td>
+                                <td>
+                                    <a href="{% url 'company_type_update' company_type.pk %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'company_type_delete' company_type.pk %}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

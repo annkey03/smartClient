@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{% if company_type %}Editar Tipo de Empresa{% else %}Crear Tipo de Empresa{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    {% if company_type %}
+                        <i class="fas fa-edit"></i> Editar Tipo de Empresa: {{ company_type.name }}
+                    {% else %}
+                        <i class="fas fa-plus"></i> Crear Nuevo Tipo de Empresa
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ company_type.name|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ company_type.description|default:'' }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        {% if company_type %}Actualizar{% else %}Crear{% endif %}
+                    </button>
+                    <a href="{% url 'admin_panel' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
